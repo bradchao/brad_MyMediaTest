@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private Button recorder;
     private String strFile;
     private Uri uriMusic;
+    private ImageView img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         sdroot = Environment.getExternalStorageDirectory();
         recorder = (Button)findViewById(R.id.recorder);
-//        recorder.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                test3();
-//            }
-//        });
+        img = (ImageView)findViewById(R.id.img);
 
         sp = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
         sound1 = sp.load(this, R.raw.cars004, 1);
@@ -131,8 +129,15 @@ public class MainActivity extends AppCompatActivity {
                 uriMusic = null;
             }
         }else if (requestCode == 34){
-            Log.v("brad", "OK2");
+            after1(data);
         }
+    }
+
+    // 縮圖
+    private void after1(Intent it){
+        Bitmap bmp = (Bitmap)it.getExtras().get("data");
+        img.setImageBitmap(bmp);
+
     }
 
     private String getFilePathFromUri(Uri uri){
