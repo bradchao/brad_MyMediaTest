@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 uriMusic = null;
             }
+        }else if (requestCode == 34){
+            Log.v("brad", "OK2");
         }
     }
 
@@ -163,6 +165,12 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.v("brad", "e1:" + e.toString());
         }
+    }
+
+    public void test7(View v){
+        Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(it, 34);
+
     }
 
 
