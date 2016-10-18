@@ -3,9 +3,12 @@ package brad.tw.mymediatest;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
@@ -113,7 +116,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 12){
+            if (resultCode == RESULT_OK){
+                Uri uri = data.getData();
+                Log.v("brad",uri.getPath());
+                Log.v("brad",getFilePathFromUri(uri));
 
+            }else{
+            }
         }
     }
+
+    private String getFilePathFromUri(Uri uri){
+        String[] proj = {MediaStore.Audio.Media.DATA};
+        Cursor c = getContentResolver().query(uri,proj,null,null,null);
+        c.moveToFirst();
+        return c.getString(c.getColumnIndex(proj[0]));
+    }
+
 }
