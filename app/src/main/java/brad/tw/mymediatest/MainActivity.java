@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private File sdroot;
     private Button recorder;
     private String strFile;
-    private Uri uriMusic;
+    private Uri uriMusic, uriPhoto;
     private ImageView img;
 
     @Override
@@ -129,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
                 uriMusic = null;
             }
         }else if (requestCode == 34){
-            after1(data);
+            //after1(data);
+            after2();
         }
     }
 
@@ -137,6 +138,11 @@ public class MainActivity extends AppCompatActivity {
     private void after1(Intent it){
         Bitmap bmp = (Bitmap)it.getExtras().get("data");
         img.setImageBitmap(bmp);
+
+    }
+    // 縮圖
+    private void after2(){
+        img.setImageURI(uriPhoto);
 
     }
 
@@ -174,6 +180,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void test7(View v){
         Intent it = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        uriPhoto = Uri.fromFile(new File(sdroot, "brad.jpg"));
+        it.putExtra(MediaStore.EXTRA_OUTPUT, uriPhoto);
+
+
         startActivityForResult(it, 34);
 
     }
