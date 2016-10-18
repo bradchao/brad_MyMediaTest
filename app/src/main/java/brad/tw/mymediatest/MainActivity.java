@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 
 import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private SoundPool sp;
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private MediaRecorder mRecorder;
     private File sdroot;
     private Button recorder;
+    private String strFile;
+    private Uri uriMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +88,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startRecording() {
+
+        strFile = sdroot.getAbsolutePath() + "/brad.mp3";
+
         mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(sdroot.getAbsolutePath() + "/brad.3gp");
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+        mRecorder.setOutputFile(strFile);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
 
         try {
             mRecorder.prepare();
@@ -120,8 +126,9 @@ public class MainActivity extends AppCompatActivity {
                 Uri uri = data.getData();
                 Log.v("brad",uri.getPath());
                 Log.v("brad",getFilePathFromUri(uri));
-
+                uriMusic = uri;
             }else{
+                uriMusic = null;
             }
         }
     }
@@ -132,5 +139,31 @@ public class MainActivity extends AppCompatActivity {
         c.moveToFirst();
         return c.getString(c.getColumnIndex(proj[0]));
     }
+
+    public void test5(View v){
+        MediaPlayer mp = new MediaPlayer();
+        try {
+            mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mp.setDataSource(strFile);
+            mp.prepare();
+            mp.start();
+        } catch (Exception e) {
+            Log.v("brad", "e1:" + e.toString());
+        }
+    }
+    public void test6(View v){
+        if (uriMusic == null) return;
+
+        MediaPlayer mp = new MediaPlayer();
+        try {
+            mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mp.setDataSource(this,uriMusic);
+            mp.prepare();
+            mp.start();
+        } catch (Exception e) {
+            Log.v("brad", "e1:" + e.toString());
+        }
+    }
+
 
 }
