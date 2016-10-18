@@ -1,11 +1,13 @@
 package brad.tw.mymediatest;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.media.MediaRecorder;
 import android.media.SoundPool;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -43,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
 
         sdroot = Environment.getExternalStorageDirectory();
         recorder = (Button)findViewById(R.id.recorder);
-        recorder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                test3();
-            }
-        });
+//        recorder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                test3();
+//            }
+//        });
 
         sp = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
         sound1 = sp.load(this, R.raw.cars004, 1);
@@ -63,11 +65,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void test3(){
+    public void test3(View v){
         isRecording = !isRecording;
         if (isRecording){
             recorder.setText("STOP");
-            startRecording();
+            new Thread(){
+                @Override
+                public void run() {
+                    startRecording();
+                }
+            }.start();
         }else{
             recorder.setText("START");
             stopRecording();
@@ -97,5 +104,16 @@ public class MainActivity extends AppCompatActivity {
         mRecorder = null;
     }
 
+    public void test4(View v){
+        Intent it = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
+        startActivityForResult(it, 12);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 12){
+
+        }
+    }
 }
